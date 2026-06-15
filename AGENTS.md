@@ -42,7 +42,8 @@ src/
     sitemap.ts robots.ts manifest.ts opengraph-image.tsx icon.svg   # SEO/PWA
   components/
     layout/   Navbar, Footer
-    home/     Hero, ProcessStrip, FeaturedProducts, CategoryShowcase, AboutTeaser, CtaSection
+    home/     Hero, HeroGallery (autoplay carousel), ProcessStrip, FeaturedProducts,
+              CategoryShowcase, AboutTeaser, CtaSection
     products/ ProductCard (3D tilt), CatalogFilter (client island), VariantPills
     ui/       SmoothScroll, Reveal, MagneticButton, TiltCard, GradientMesh, SectionHeading
   data/products.ts          # categories + products + helpers (single source of truth)
@@ -102,7 +103,9 @@ Visuals are gradient + emoji placeholders (no image files needed). For real phot
 1. Add images to `public/images/` and an `image` field to the product type.
 2. In `components/products/ProductCard.tsx` (`ProductVisual`) replace the emoji `<span>`
    with `next/image`’s `<Image fill ... />`.
-3. For remote images, add the host to `images.remotePatterns` in `next.config.ts`.
+3. The hero carousel slides live in `components/home/HeroGallery.tsx` (`slides` array +
+   `<Slide />`); swap the gradient/emoji for real images there too.
+4. For remote images, add the host to `images.remotePatterns` in `next.config.ts`.
 
 ## Production notes
 
