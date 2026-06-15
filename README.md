@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🥐 Aurora Bakehouse
 
-## Getting Started
+A futuristic bakery website built with Next.js 16 — sourdough breads, laminated pastries,
+and signature cakes. White-dominant design with a `#FF3333` accent, tasteful CSS 3D,
+smooth scrolling, scroll-reveal motion, and production-grade SEO.
 
-First, run the development server:
+![Aurora Bakehouse](public/icon.svg)
+
+## Features
+
+- **Three routes** — Home, Products (catalog with category + variant filtering), About
+- **CSS 3D & motion** — pointer-tilt product cards, parallax hero, magnetic buttons,
+  scroll-reveal sections, route transitions, smooth (Lenis) scrolling
+- **Accessible** — every animation respects `prefers-reduced-motion`
+- **SEO built-in** — per-route metadata, `sitemap.xml`, `robots.txt`, web manifest,
+  dynamic OpenGraph image, and JSON-LD (Bakery + Product/ItemList)
+- **No backend** — products live in a single typed data file, easy to edit
+
+## Tech stack
+
+| | |
+|---|---|
+| Framework | Next.js 16 (App Router, Turbopack) |
+| Language | TypeScript, React 19 |
+| Styling | Tailwind CSS v4 |
+| Animation | motion (Framer Motion) + lenis |
+| Fonts | Inter + Space Grotesk (`next/font`) |
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build   # production build
+npm start       # serve the build
+npm run lint    # lint
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Configuration
 
-## Learn More
+Set the production URL so SEO metadata resolves correctly:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# .env.local
+NEXT_PUBLIC_SITE_URL=https://your-domain.com
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Brand details (name, contact, socials) live in `src/lib/seo.ts`; the catalog lives in
+`src/data/products.ts`. See `AGENTS.md` for project conventions and how to add products.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deploy
 
-## Deploy on Vercel
+Deploy on [Vercel](https://vercel.com) with zero configuration — import the repo, set
+`NEXT_PUBLIC_SITE_URL`, and ship. Make sure `npm run build` passes first.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Product imagery uses on-brand gradient placeholders out of the box; swap in real photos via
+`next/image` (see `AGENTS.md`).
