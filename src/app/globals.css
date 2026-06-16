@@ -158,16 +158,6 @@
       radial-gradient(46% 60% at 60% 92%, rgba(255, 51, 51, 0.3), transparent 70%);
   }
 
-  /* Light grey variant of the aurora mesh — used by the hero (dark text on top) */
-  .mesh-grey {
-    background-color: #e9e9ee;
-    background-image:
-      linear-gradient(165deg, rgba(255, 255, 255, 0.55), transparent 55%),
-      radial-gradient(42% 52% at 16% 16%, rgba(255, 51, 51, 0.16), transparent 70%),
-      radial-gradient(40% 46% at 86% 22%, rgba(255, 122, 71, 0.12), transparent 72%),
-      radial-gradient(48% 60% at 62% 94%, rgba(255, 51, 51, 0.12), transparent 70%);
-  }
-
   /* Subtle film grain overlay */
   .grain::after {
     content: "";

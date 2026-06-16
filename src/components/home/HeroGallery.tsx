@@ -20,7 +20,8 @@ const variants = {
   exit: (dir: number) => ({ x: dir > 0 ? "-100%" : "100%", opacity: 0 }),
 };
 
-export default function HeroGallery() {
+/** Full-bleed background carousel. Overlaid hero content is passed as `children`. */
+export default function HeroGallery({ children }: { children?: React.ReactNode }) {
   const reduce = useReducedMotion();
   const [index, setIndex] = useState(0);
   const [dir, setDir] = useState(1);
@@ -62,70 +63,78 @@ export default function HeroGallery() {
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
-      className="relative"
+      className="relative min-h-screen w-full overflow-hidden bg-ink"
     >
-      <div className="glow-red relative h-[58vh] min-h-[400px] overflow-hidden rounded-[2rem] bg-ink sm:h-[66vh] lg:h-[82vh]">
-        <AnimatePresence custom={dir} initial={false}>
-          <motion.div
-            key={index}
-            custom={dir}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{
-              x: { duration: reduce ? 0 : 0.6, ease: [0.16, 1, 0.3, 1] },
-              opacity: { duration: reduce ? 0 : 0.4 },
-            }}
-            className="absolute inset-0"
-          >
-            <Slide slide={active} />
-          </motion.div>
-        </AnimatePresence>
-
-        {/* counter */}
-        <div
-          aria-live="polite"
-          className="glass-dark absolute right-4 top-4 z-10 rounded-full px-3 py-1 text-xs font-semibold text-white"
+      {/* slides */}
+      <AnimatePresence custom={dir} initial={false}>
+        <motion.div
+          key={index}
+          custom={dir}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{
+            x: { duration: reduce ? 0 : 0.7, ease: [0.16, 1, 0.3, 1] },
+            opacity: { duration: reduce ? 0 : 0.5 },
+          }}
+          className="absolute inset-0"
         >
-          {index + 1} / {slides.length}
-        </div>
+          <Slide slide={active} />
+        </motion.div>
+      </AnimatePresence>
 
-        {/* prev / next */}
+      {/* scrims for text legibility */}
+      <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/45 to-ink/30" />
+      <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-ink/80 via-ink/25 to-transparent" />
+
+      {/* overlaid hero content */}
+      <div className="relative z-10">{children}</div>
+
+      {/* current slide label */}
+      <div className="pointer-events-none absolute bottom-9 left-6 z-20 hidden sm:block">
+        <p aria-live="polite" className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+          {active.tag}
+        </p>
+        <p className="text-lg font-bold text-white">{active.name}</p>
+      </div>
+
+      {/* control bar: prev · dots · next */}
+      <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 items-center gap-4">
         <button
           type="button"
           onClick={prev}
           aria-label="Previous slide"
-          className="glass-dark absolute left-3 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full text-white transition-colors hover:bg-primary"
+          className="glass-dark grid h-11 w-11 place-items-center rounded-full text-white transition-colors hover:bg-primary"
         >
           <Chevron dir="left" />
         </button>
+
+        <div className="flex items-center gap-2.5">
+          {slides.map((slide, i) => (
+            <button
+              key={slide.name}
+              type="button"
+              onClick={() => goTo(i)}
+              aria-label={`Go to ${slide.name}`}
+              aria-current={i === index}
+              className={
+                i === index
+                  ? "h-2.5 w-7 rounded-full bg-primary transition-all"
+                  : "h-2.5 w-2.5 rounded-full bg-white/40 transition-all hover:bg-white/70"
+              }
+            />
+          ))}
+        </div>
+
         <button
           type="button"
           onClick={next}
           aria-label="Next slide"
-          className="glass-dark absolute right-3 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full text-white transition-colors hover:bg-primary"
+          className="glass-dark grid h-11 w-11 place-items-center rounded-full text-white transition-colors hover:bg-primary"
         >
           <Chevron dir="right" />
         </button>
-      </div>
-
-      {/* dots */}
-      <div className="mt-5 flex items-center justify-center gap-2.5">
-        {slides.map((slide, i) => (
-          <button
-            key={slide.name}
-            type="button"
-            onClick={() => goTo(i)}
-            aria-label={`Go to ${slide.name}`}
-            aria-current={i === index}
-            className={
-              i === index
-                ? "h-2.5 w-7 rounded-full bg-primary transition-all"
-                : "h-2.5 w-2.5 rounded-full bg-ink/20 transition-all hover:bg-ink/45"
-            }
-          />
-        ))}
       </div>
     </div>
   );
@@ -134,18 +143,12 @@ export default function HeroGallery() {
 function Slide({ slide }: { slide: (typeof slides)[number] }) {
   return (
     <div
-      className="grain relative grid h-full place-items-center"
-      style={{ background: `radial-gradient(125% 125% at 30% 18%, ${slide.from}, ${slide.to})` }}
+      className="grain absolute inset-0 grid place-items-center"
+      style={{ background: `radial-gradient(120% 120% at 66% 28%, ${slide.from}, ${slide.to})` }}
     >
-      <span className="text-[8rem] drop-shadow-[0_24px_40px_rgba(0,0,0,0.45)] sm:text-[11rem] lg:text-[14rem]">
+      <span className="select-none text-[12rem] drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)] sm:text-[16rem] lg:text-[20rem]">
         {slide.emoji}
       </span>
-      <div className="glass absolute bottom-5 left-5 rounded-2xl px-5 py-3">
-        <p className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-primary">
-          {slide.tag}
-        </p>
-        <p className="text-lg font-bold text-ink">{slide.name}</p>
-      </div>
     </div>
   );
 }
