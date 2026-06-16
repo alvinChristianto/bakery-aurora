@@ -64,7 +64,7 @@ export default function HeroGallery() {
       onBlur={() => setPaused(false)}
       className="relative"
     >
-      <div className="glow-red relative aspect-[5/6] overflow-hidden rounded-[2rem] bg-ink">
+      <div className="glow-red relative h-[58vh] min-h-[400px] overflow-hidden rounded-[2rem] bg-ink sm:h-[66vh] lg:h-[82vh]">
         <AnimatePresence custom={dir} initial={false}>
           <motion.div
             key={index}
@@ -122,7 +122,7 @@ export default function HeroGallery() {
             className={
               i === index
                 ? "h-2.5 w-7 rounded-full bg-primary transition-all"
-                : "h-2.5 w-2.5 rounded-full bg-white/30 transition-all hover:bg-white/60"
+                : "h-2.5 w-2.5 rounded-full bg-ink/20 transition-all hover:bg-ink/45"
             }
           />
         ))}
@@ -137,7 +137,7 @@ function Slide({ slide }: { slide: (typeof slides)[number] }) {
       className="grain relative grid h-full place-items-center"
       style={{ background: `radial-gradient(125% 125% at 30% 18%, ${slide.from}, ${slide.to})` }}
     >
-      <span className="text-[8rem] drop-shadow-[0_24px_40px_rgba(0,0,0,0.45)] sm:text-[10rem]">
+      <span className="text-[8rem] drop-shadow-[0_24px_40px_rgba(0,0,0,0.45)] sm:text-[11rem] lg:text-[14rem]">
         {slide.emoji}
       </span>
       <div className="glass absolute bottom-5 left-5 rounded-2xl px-5 py-3">
