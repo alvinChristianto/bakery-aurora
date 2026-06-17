@@ -3,7 +3,7 @@ import type { Product } from "@/data/products";
 import { formatPrice, getCategory } from "@/data/products";
 import TiltCard from "@/components/ui/TiltCard";
 import VariantPills from "./VariantPills";
-import { cn } from "@/lib/utils";
+import ProductVisual from "./ProductVisual";
 
 /**
  * Product card with a 3D pointer-tilt and a gradient "photo" placeholder.
@@ -53,46 +53,3 @@ export default function ProductCard({ product, href }: { product: Product; href?
   );
 }
 
-function ProductVisual({ product }: { product: Product }) {
-  return (
-    <div
-      className="relative aspect-[5/4] overflow-hidden rounded-[1.25rem]"
-      style={{
-        background: `radial-gradient(120% 120% at 28% 20%, ${product.accent} 0%, ${product.accent}cc 38%, #1a1014 100%)`,
-      }}
-    >
-      {/* tags */}
-      {product.tags.length > 0 && (
-        <div className="absolute left-3 top-3 z-10 flex flex-wrap gap-1.5">
-          {product.tags.slice(0, 2).map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full bg-black/30 px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-wide text-white backdrop-blur"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      )}
-
-      {/* depth-floated emoji stand-in for product photography */}
-      <span
-        aria-hidden
-        className="absolute inset-0 grid place-items-center text-[5.5rem] drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)] transition-transform duration-500 group-hover/card:scale-110"
-        style={{ transform: "translateZ(48px)" }}
-      >
-        {product.emoji}
-      </span>
-
-      {/* gloss + shimmer */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-white/10" />
-      <div
-        className={cn(
-          "absolute inset-0 -translate-x-full opacity-0 transition-all duration-700",
-          "group-hover/card:translate-x-full group-hover/card:opacity-100",
-          "bg-gradient-to-r from-transparent via-white/25 to-transparent",
-        )}
-      />
-    </div>
-  );
-}

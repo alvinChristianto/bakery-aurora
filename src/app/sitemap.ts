@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/seo";
+import { products } from "@/data/products";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -9,10 +10,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/about", priority: 0.7 },
   ];
 
-  return routes.map(({ path, priority }) => ({
+  const staticRoutes = routes.map(({ path, priority }) => ({
     url: `${siteConfig.url}${path}`,
     lastModified: now,
-    changeFrequency: "weekly",
+    changeFrequency: "weekly" as const,
     priority,
   }));
+
+  const productRoutes = products.map((product) => ({
+    url: `${siteConfig.url}/products/${product.slug}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...productRoutes];
 }

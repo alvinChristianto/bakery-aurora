@@ -276,6 +276,29 @@ export function getProductsByCategory(slug: string): Product[] {
   return products.filter((p) => p.categorySlug === slug);
 }
 
+export function getProductBySlug(slug: string): Product | undefined {
+  return products.find((p) => p.slug === slug);
+}
+
+export function getRelatedProducts(
+  product: Product,
+  limit = 3,
+  currentProductId?: string,
+): Product[] {
+  const exclude = currentProductId ?? product.id;
+  // Try same category first
+  const sameCategory = products.filter(
+    (p) => p.categorySlug === product.categorySlug && p.id !== exclude,
+  );
+  if (sameCategory.length >= limit) return sameCategory.slice(0, limit);
+
+  // Fall back to other products if the category is thin
+  const rest = products.filter(
+    (p) => p.categorySlug !== product.categorySlug && p.id !== exclude,
+  );
+  return [...sameCategory, ...rest].slice(0, limit);
+}
+
 export function getCategory(slug: string): Category | undefined {
   return categories.find((c) => c.slug === slug);
 }

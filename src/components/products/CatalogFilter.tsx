@@ -63,7 +63,7 @@ export default function CatalogFilter({ initialCategory = ALL }: { initialCatego
               exit={{ opacity: 0, scale: 0.92 }}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             >
-              <ProductCard product={product} />
+              <ProductCard product={product} href={`/products/${product.slug}`} />
             </motion.div>
           ))}
         </AnimatePresence>
