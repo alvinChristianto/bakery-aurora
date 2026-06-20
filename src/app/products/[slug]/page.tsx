@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { products, getProductBySlug, getRelatedProducts, getCategory, formatPrice } from "@/data/products";
-import { buildMetadata, siteConfig } from "@/lib/seo";
+import { buildMetadata, siteConfig, productJsonLd as buildProductJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 import ProductGallery from "@/components/products/ProductGallery";
 import Reveal from "@/components/ui/Reveal";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -56,27 +56,32 @@ export default async function ProductDetailPage({
   const lowPrice = Math.min(...allPrices);
   const highPrice = Math.max(...allPrices);
 
-  const productJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
+  const productLd = buildProductJsonLd({
     name: product.name,
     description: product.description,
-    category: product.categorySlug,
-    offers: {
-      "@type": "AggregateOffer",
-      lowPrice: lowPrice.toFixed(2),
-      highPrice: highPrice.toFixed(2),
-      priceCurrency: "USD",
-      availability: "https://schema.org/InStock",
-    },
-  };
+    categorySlug: product.categorySlug,
+    slug: product.slug,
+    id: product.id,
+    lowPrice: lowPrice.toFixed(2),
+    highPrice: highPrice.toFixed(2),
+  });
+
+  const breadcrumbLd = breadcrumbJsonLd([
+    { name: "Home", url: siteConfig.url },
+    { name: "Menu", url: `${siteConfig.url}/products` },
+    { name: product.name, url: `${siteConfig.url}/products/${product.slug}` },
+  ]);
 
   return (
     <>
       {/* JSON-LD */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
 
       {/* Breadcrumb */}

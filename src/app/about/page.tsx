@@ -3,7 +3,7 @@ import Reveal from "@/components/ui/Reveal";
 import SectionHeading from "@/components/ui/SectionHeading";
 import GradientMesh from "@/components/ui/GradientMesh";
 import CtaSection from "@/components/home/CtaSection";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, teamPersonsJsonLd, howToJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "About",
@@ -34,8 +34,17 @@ const team = [
 ];
 
 export default function AboutPage() {
+  const teamLd = teamPersonsJsonLd(team.map((m) => ({ name: m.name, jobTitle: m.role })));
+  const howToLd = howToJsonLd({
+    name: "How Aurora Bakehouse Bakes Every Day",
+    description: "The same four-step rhythm runs every day at Aurora Bakehouse, from milling grain to golden crust.",
+    steps: process.map((p) => ({ name: p.title, text: p.body })),
+  });
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(teamLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToLd) }} />
       {/* hero */}
       <section className="mesh-bg grain relative isolate overflow-hidden px-6 pb-24 pt-40 text-center">
         <GradientMesh />

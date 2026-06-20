@@ -23,6 +23,7 @@ const itemListJsonLd = {
       name: p.name,
       description: p.description,
       category: p.categorySlug,
+      url: `${siteConfig.url}/products/${p.slug}`,
       offers: {
         "@type": "Offer",
         price: p.basePrice.toFixed(2),

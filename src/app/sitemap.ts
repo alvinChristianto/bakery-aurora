@@ -3,7 +3,9 @@ import { siteConfig } from "@/lib/seo";
 import { products } from "@/data/products";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
+  const BUILD_DATE = process.env.NEXT_PUBLIC_BUILD_DATE
+    ? new Date(process.env.NEXT_PUBLIC_BUILD_DATE)
+    : new Date("2026-06-20");
   const routes: { path: string; priority: number }[] = [
     { path: "", priority: 1 },
     { path: "/products", priority: 0.9 },
@@ -12,14 +14,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const staticRoutes = routes.map(({ path, priority }) => ({
     url: `${siteConfig.url}${path}`,
-    lastModified: now,
+    lastModified: BUILD_DATE,
     changeFrequency: "weekly" as const,
     priority,
   }));
 
   const productRoutes = products.map((product) => ({
     url: `${siteConfig.url}/products/${product.slug}`,
-    lastModified: now,
+    lastModified: BUILD_DATE,
     changeFrequency: "monthly" as const,
     priority: 0.6,
   }));
